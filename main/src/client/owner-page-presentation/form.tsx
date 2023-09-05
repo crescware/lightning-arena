@@ -40,14 +40,8 @@ export function Form(): ReactElement {
   );
 
   return (
-    <div
-      className={clsx(
-        'mx-auto flex max-w-3xl flex-col gap-10 rounded-xl p-10',
-        'border border-slate-300 dark:border-slate-900',
-        'bg-slate-200 dark:bg-slate-700',
-      )}
-    >
-      <h1 className="text-2xl font-semibold">新規アリーナ</h1>
+    <div className="flex flex-col gap-6">
+      <p className="text-2xl font-semibold">新規アリーナ</p>
       <form
         className={clsx('flex flex-col gap-6')}
         onSubmit={(ev): void => {

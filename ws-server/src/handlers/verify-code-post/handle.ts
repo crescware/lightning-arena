@@ -3,7 +3,7 @@ import { FromSchema } from 'json-schema-to-ts';
 import { AssertValidJsonError } from 'universal/src/assert-valid-json';
 
 import { codeAtom } from '../../shared/code';
-import { BadRequestError, ForbiddenError } from '../../shared/error';
+import { ForbiddenError } from '../../shared/error';
 import { assertValidJson } from '../../utils/assert-valid-json';
 import { requestSchema } from './request-schema';
 
@@ -17,7 +17,8 @@ export function handle(req: Request, res: Response): void {
     assertValidJson<FromSchema<typeof requestSchema>>(requestSchema, body);
   } catch (e) {
     if (e instanceof AssertValidJsonError) {
-      throw new BadRequestError(e.message);
+      console.error(e);
+      throw new ForbiddenError('invalid');
     }
     throw e;
   }

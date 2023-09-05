@@ -1,24 +1,14 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { exists } from 'universal/src';
 
 import { useCode } from './use-code';
 
-type Return =
-  | Readonly<{
-      isVerified: boolean;
-      error: null;
-    }>
-  | Readonly<{
-      isVerified: false;
-      error: Error;
-    }>;
-
-export class InvalidCodeError extends Error {}
+type Return = Readonly<{
+  isVerified: boolean;
+}>;
 
 export function useVerifyCode(ip: string): Return {
   const [isVerified, setIsVerified] = useState<boolean>(false);
-  const [error, setError] = useState<Error | null>(null);
   const code = useCode();
   const router = useRouter();
 
@@ -31,7 +21,7 @@ export function useVerifyCode(ip: string): Return {
       });
 
       if (!res.ok) {
-        setError(new InvalidCodeError('forbidden access'));
+        setIsVerified(false);
         return;
       }
 
@@ -41,9 +31,5 @@ export function useVerifyCode(ip: string): Return {
     });
   }, [ip, code, router]);
 
-  return useMemo(() => {
-    return exists(error)
-      ? { isVerified: false, error }
-      : { isVerified, error: null };
-  }, [isVerified, error]);
+  return useMemo(() => ({ isVerified }), [isVerified]);
 }
